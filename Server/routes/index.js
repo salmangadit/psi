@@ -92,6 +92,32 @@ exports.latest = function(req, res){
 	});
 };
 
+// Get last :limit values from DB. If limit is not given, return 10.
+// JSON:
+// {
+// 	[
+// 		{
+// 			"time":"",
+// 			"reading":""
+// 		}
+// 	]
+// }
+exports.list = function(req, res){
+	var limit = null;
+	if (typeof req.params.limit == 'undefined')
+		limit = 10;
+	else
+		limit = req.params.limit;
+
+	db.getLogs(limit, function(err, result){
+		if (err){
+			console.log(err);
+		} else {
+			console.log(result);
+		}
+	});
+};
+
 function storeInDB(readings){
 	 db.saveLogs(readings, function(err, result){
 		if (err){

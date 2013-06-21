@@ -45,10 +45,13 @@ exports.saveLogs = function(logs, callback){
 
 
   // Returns a full list of PSI logs in the system
-  exports.getLogs = function(callback){
+  exports.getLogs = function(limit, callback){
   console.log(callback);
-    Log.find(function(err, result){
-      console.log('find result: ' + result);
+    Log.find()
+    .sort({$natural:-1})
+    .limit(limit)
+    .exec(function(err, result){
+      //console.log('find result: ' + result);
       if (err) {
         console.log(err);
         return callback(err, {});
