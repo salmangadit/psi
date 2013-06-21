@@ -8,7 +8,11 @@ var express = require('express')
   , db = require('./model/db')
   , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , nodeio = require('node.io')
+  , request = require('request');
+
+var schedule = require('node-schedule');
 
 var app = express();
 
@@ -31,8 +35,18 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/latest', routes.latest);
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	console.log('Express server listening on port ' + app.get('port'));
+});
+
+var rule = new schedule.RecurrenceRule();
+rule.minute = [15,30,45,0];
+
+var cron = schedule.scheduleJob(rule, function(){
+	request('http://localhost:3000/latest', function(error, response, body) {
+	    var latest = JSON.parse(body);
+	    console.log("body: " + body);
+	});
 });

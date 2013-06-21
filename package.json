@@ -9,6 +9,8 @@
     "express": "3.2.0",
     "jade": "*",
     "node.io":"*",
-    "mongoose":"*"
+    "mongoose":"*",
+    "node-schedule":"*",
+    "request":"*"
   }
 }
