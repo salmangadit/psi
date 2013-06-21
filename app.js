@@ -45,7 +45,7 @@ var rule = new schedule.RecurrenceRule();
 rule.minute = [0, 2, 4, 6, 8, 10, 30, 45];
 
 var cron = schedule.scheduleJob(rule, function(){
-	request('http://localhost:3000/latest', function(error, response, body) {
+	request('http://nameless-scrubland-5187.herokuapp.com/latest', function(error, response, body) {
 	    var latest = JSON.parse(body);
 	    console.log("body: " + body);
 	});
