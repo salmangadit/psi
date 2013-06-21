@@ -75,10 +75,10 @@ exports.latest = function(req, res){
          		obj.reading = readings[i];
          	} else if (readings[i]=="-"){
          		var temp = i - 1;
-
-         		
-
-         		var time = matchTime(i-1);
+         		while (readings[temp] == "-"){
+         			temp-=1;
+         		}
+         		var time = matchTime(temp);
 
          		obj.time = time;
          		obj.reading = readings[i-1];
