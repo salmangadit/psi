@@ -8,6 +8,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,7 +21,7 @@ import android.widget.ImageView;
 public class ConstantsGenerator extends AsyncTask<Void, Void, String> {
 	private Cache cache = null;
 	private static String TAG = "ARMSMobile.java";
-	static JSONObject jObj = null;
+	static JSONArray jObj = null;
 	ProgressDialog progressDialog;
 	MainActivity main = null;
 	String endpoint;
@@ -41,7 +42,7 @@ public class ConstantsGenerator extends AsyncTask<Void, Void, String> {
 		HttpClient httpClient = new DefaultHttpClient();
 		// HttpContext localContext = new BasicHttpContext();
 		HttpGet httpGet = new HttpGet(
-				endpoint + "/latest");
+				endpoint + "/list");
 		String text = null;
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
@@ -58,7 +59,7 @@ public class ConstantsGenerator extends AsyncTask<Void, Void, String> {
 		Log.v(TAG, "Response string: " + results);
 		if (results != null) {
 			try {
-				jObj = new JSONObject(results);
+				jObj = new JSONArray(results);
 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -68,11 +69,18 @@ public class ConstantsGenerator extends AsyncTask<Void, Void, String> {
 			}
 
 			try {
-					cache.latest_value = Integer.parseInt(jObj.getString("reading"));
-					cache.latest_time =  jObj.getString("time");
-					main.time.setText(jObj.getString("time"));
-					main.value.setText(jObj.getString("reading"));
+				if (jObj.getJSONObject(0).getString("reading") != "-"){
+					cache.latest_value = Integer.parseInt(jObj.getJSONObject(0).getString("reading"));
+				} else {
+					cache.latest_value = -1;
+				}
+					cache.latest_time =  jObj.getJSONObject(0).getString("time");
+					main.time.setText(jObj.getJSONObject(0).getString("time"));
+					main.value.setText(jObj.getJSONObject(0).getString("reading"));
 					
+					if (cache.latest_value == -1){
+						main.hazard.setText("Server problems. Value unreadable.");
+					}
 					if (cache.latest_value >= 0 && cache.latest_value <= 50){
 						main.hazard.setText("Good");
 					} else if (cache.latest_value >= 51 && cache.latest_value <= 100){
@@ -84,6 +92,21 @@ public class ConstantsGenerator extends AsyncTask<Void, Void, String> {
 					} else {
 						main.hazard.setText("Hazardous");
 					} 
+					
+					for (int i = 0; i<jObj.length(); i++){
+						PSIValue val = new PSIValue();
+						val.time = jObj.getJSONObject(i).getString("time");
+						if (jObj.getJSONObject(i).getString("reading") != "-"){
+							val.value = Integer.parseInt(jObj.getJSONObject(i).getString("reading"));
+						} else {
+							val.value = -1;
+						}
+						
+						cache.last_ten_readings.add(val);
+					}
+					
+					Globals appState = ((Globals) main.getApplicationContext());
+					appState.setCache(cache);
 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

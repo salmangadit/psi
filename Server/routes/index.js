@@ -115,6 +115,16 @@ exports.list = function(req, res){
 		} else {
 			console.log(result);
 		}
+
+		var jsonarray = [];
+		for (var i=0; i<result.length; i++){
+			var obj = new Object();
+			obj.time = result[i].time;
+			obj.reading = result[i].value;
+			jsonarray.push(obj);
+		}
+
+		res.send(JSON.stringify(jsonarray));
 	});
 };
 
