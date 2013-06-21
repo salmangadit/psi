@@ -29,7 +29,7 @@ public class ConstantsGenerator extends AsyncTask<Void, Void, String> {
 	public ConstantsGenerator(Cache con, MainActivity main) {
 		cache = con;
 		this.main = main;
-		endpoint = "http://nameless-scrubland-5187.herokuapp.com";
+		endpoint = "http://arcane-lake-8112.herokuapp.com";
 	}
 
 	@Override
