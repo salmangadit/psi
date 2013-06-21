@@ -31,37 +31,6 @@ exports.latest = function(req, res){
          	readings.push(tempReadings[i].text);
          }
 
-         var storage = [];
-		        var today = new Date();
-				var dd = today.getDate();
-				var mm = today.getMonth()+1; //January is 0!
-
-				var yyyy = today.getFullYear();
-				if(dd<10){dd='0'+dd};
-				if(mm<10){mm='0'+mm};
-				today = dd+'/'+mm+'/'+yyyy;
-				console.log(today);
-
-		 		for (var j = 0; j<3; j++){
-		 			var store = new Object();
-		 			store.time = matchTime(j);
-		 			store.value = parseInt(readings[j]);
-		 			store.date = today;
-		 			storage.push(store);
-		 		}
-
-		 		if (doneGlobal == false){
-		 		//data hasnt been stored for today
-		 			storeInDB(storage);
-		 			doneGlobal = true;
-		 		}
-
-		 		// this will ensure that we reset the storage flag
-		 		if (dateGlobal != today){
-		 			dateGlobal = today;
-		 			doneGlobal = false;
-		 		}
-
          // Get latest reading
          var latestReading;
          var obj = new Object();
