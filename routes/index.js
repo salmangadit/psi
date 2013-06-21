@@ -2,7 +2,10 @@
 /*
  * GET home page.
  */
- var nodeio = require('node.io');
+var nodeio = require('node.io');
+var db = require('../model/db');
+var dateGlobal = null;
+var doneGlobal = true;
 
  exports.index = function(req, res){
  	res.render('index', { title: 'Hazey' });
@@ -35,6 +38,37 @@ exports.latest = function(req, res){
          	
          	if (i==readings.length-1){
          		//Last reading, push dump to mongo
+         		var storage = [];
+		        var today = new Date();
+				var dd = today.getDate();
+				var mm = today.getMonth()+1; //January is 0!
+
+				var yyyy = today.getFullYear();
+				if(dd<10){dd='0'+dd};
+				if(mm<10){mm='0'+mm};
+				today = dd+'/'+mm+'/'+yyyy;
+				console.log(today);
+
+		 		for (var j = 0; j<readings.length; j++){
+		 			var store = new Object();
+		 			store.time = matchTime(j);
+		 			store.value = parseInt(readings[j]);
+		 			store.date = today;
+		 			storage.push(store);
+		 		}
+
+		 		if (doneGlobal == false){
+		 		//data hasnt been stored for today
+		 			storeInDB(storage);
+		 			doneGlobal = true;
+		 		}
+
+		 		// this will ensure that we reset the storage flag
+		 		if (dateGlobal != today){
+		 			dateGlobal = today;
+		 			doneGlobal = false;
+		 		}
+
          		var time = matchTime(i);
 
          		obj.time = time;
@@ -53,6 +87,16 @@ exports.latest = function(req, res){
      });
 	});
 };
+
+function storeInDB(readings){
+	 db.saveLogs(readings, function(err, result){
+		if (err){
+			console.log(err);
+		} else {
+			console.log(result);
+		}
+ 	});
+}
 
 function matchTime(readingNumber){
 	if (readingNumber == 0){

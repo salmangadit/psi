@@ -42,7 +42,7 @@ http.createServer(app).listen(app.get('port'), function(){
 });
 
 var rule = new schedule.RecurrenceRule();
-rule.minute = [15,30,45,0];
+rule.minute = [0, 2, 4, 6, 8, 10, 30, 45];
 
 var cron = schedule.scheduleJob(rule, function(){
 	request('http://localhost:3000/latest', function(error, response, body) {

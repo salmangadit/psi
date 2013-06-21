@@ -2,9 +2,10 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var logs = new mongoose.Schema({
-  id: {type: Number, unique: true},
+  id: {type: Number},
   value: Number,
-  timestamp: {type : Date, default: Date.now },
+  time: String,
+  date: String,
 });
 
 exports.logs = logs;

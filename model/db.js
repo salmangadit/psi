@@ -38,6 +38,12 @@ var createLog = function(log,callback){
 };
 
 
+exports.saveLogs = function(logs, callback){
+    console.log("Storing");
+    return createLog(logs, callback);
+}
+
+
   // Returns a full list of PSI logs in the system
   exports.getLogs = function(callback){
   console.log(callback);
