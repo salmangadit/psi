@@ -11,6 +11,8 @@
     "node.io":"*",
     "mongoose":"*",
     "node-schedule":"*",
-    "request":"*"
+    "request":"*",
+    "mime":"*",
+    "fs":"*"
   }
 }

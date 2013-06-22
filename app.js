@@ -10,7 +10,9 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , nodeio = require('node.io')
-  , request = require('request');
+  , request = require('request')
+  , mime = require('mime')
+  , fs = require('fs');
 
 var schedule = require('node-schedule');
 
@@ -39,10 +41,17 @@ app.get('/latest', routes.latest);
 app.get('/list/:limit', routes.list);
 app.get('/list', routes.list);
 app.get('/download-android', function(req, res){
-  var file = __dirname + '/files/Haze.apk';
-  res.download(file); // Set disposition and send it.
-});
+   var file = __dirname + '/public/files/Haze.apk';
 
+  var filename = path.basename(file);
+  var mimetype = mime.lookup(file);
+
+  res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+  res.setHeader('Content-type', mimetype);
+
+  var filestream = fs.createReadStream(file);
+  filestream.pipe(res);
+});
 
 http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
