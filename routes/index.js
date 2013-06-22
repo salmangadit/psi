@@ -109,22 +109,62 @@ exports.list = function(req, res){
 	else
 		limit = req.params.limit;
 
-	db.getLogs(limit, function(err, result){
-		if (err){
-			console.log(err);
-		} else {
-			console.log(result);
-		}
+	// db.getLogs(limit, function(err, result){
+	// 	if (err){
+	// 		console.log(err);
+	// 	} else {
+	// 		console.log(result);
+	// 	}
 
-		var jsonarray = [];
-		for (var i=0; i<result.length; i++){
-			var obj = new Object();
-			obj.time = result[i].time;
-			obj.reading = result[i].value;
-			jsonarray.push(obj);
-		}
+	// 	var jsonarray = [];
+	// 	for (var i=0; i<result.length; i++){
+	// 		var obj = new Object();
+	// 		obj.time = result[i].time;
+	// 		obj.reading = result[i].value;
+	// 		jsonarray.push(obj);
+	// 	}
 
-		res.send(JSON.stringify(jsonarray));
+	// 	res.send(JSON.stringify(jsonarray));
+	// });
+
+	nodeio.scrape(function() {
+		this.getHtml('http://app2.nea.gov.sg/weather-climate/haze-updates/psi-readings', function(err, $) {
+			var tempReadings = [];
+			$('td').each(function(title) {
+				tempReadings.push(title);
+			});
+        //console.log(JSON.stringify(readings));
+         //this.emit(stories);
+         var readings = [];
+
+         for (var i = 14; i<= 25; i++){
+         	readings.push(tempReadings[i].text);
+         }
+
+         for (var i = 40; i<= 51; i++){
+         	readings.push(tempReadings[i].text);
+         }
+
+         //Get last 10 readings
+         var latestReadings = [];
+         
+         for (var i=readings.length -1 ; i>=0; i--){
+         	if (readings[i] == "-"){
+         		continue;
+         	} else {
+         		var obj = new Object();
+         		obj.reading = readings[i];
+         		obj.time = matchTime(i);
+         		latestReadings.push(obj);
+
+         		if (latestReadings.length == limit){
+         			break;
+         		}		
+         	}
+         }
+
+         res.send(JSON.stringify(latestReadings));
+    	});
 	});
 };
 
