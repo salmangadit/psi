@@ -152,7 +152,7 @@ exports.list = function(req, res){
          var latestReadings = [];
          
          for (var i=readings.length -1 ; i>=0; i--){
-         	console.log(readin)
+         	console.log(readings[i]);
          	if (readings[i] == "-"){
          		continue;
          	} else {
