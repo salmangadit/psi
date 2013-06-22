@@ -6,6 +6,7 @@ var nodeio = require('node.io');
 var db = require('../model/db');
 var dateGlobal = null;
 var doneGlobal = true;
+var endpoint = "http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/past-24-hour-psi-readings";
 
  exports.index = function(req, res){
  	res.render('index', { title: 'Hazey' });
@@ -14,7 +15,7 @@ var doneGlobal = true;
 //Get latest PSI report
 exports.latest = function(req, res){
 	nodeio.scrape(function() {
-		this.getHtml('http://app2.nea.gov.sg/weather-climate/haze-updates/psi-readings', function(err, $) {
+		this.getHtml(endpoint, function(err, $) {
 			var tempReadings = [];
 			$('td').each(function(title) {
 				tempReadings.push(title);
@@ -24,11 +25,11 @@ exports.latest = function(req, res){
          //this.emit(stories);
          var readings = [];
 
-         for (var i = 14; i<= 25; i++){
+         for (var i = 32; i<= 43; i++){
          	readings.push(tempReadings[i].fulltext);
          }
 
-         for (var i = 40; i<= 51; i++){
+         for (var i = 58; i<= 69; i++){
          	readings.push(tempReadings[i].fulltext);
          }
 
@@ -129,7 +130,7 @@ exports.list = function(req, res){
 	// });
 
 	nodeio.scrape(function() {
-		this.getHtml('http://app2.nea.gov.sg/weather-climate/haze-updates/psi-readings', function(err, $) {
+		this.getHtml(endpoint, function(err, $) {
 			var tempReadings = [];
 			$('td').each(function(title) {
 				tempReadings.push(title);
@@ -138,13 +139,14 @@ exports.list = function(req, res){
          //this.emit(stories);
          var readings = [];
 
-         for (var i = 14; i<= 25; i++){
+         for (var i = 32; i<= 43; i++){
          	readings.push(tempReadings[i].fulltext);
          }
 
-         for (var i = 40; i<= 51; i++){
+         for (var i = 58; i<= 69; i++){
          	readings.push(tempReadings[i].fulltext);
          }
+
 
          //Get last 10 readings
          var latestReadings = [];
