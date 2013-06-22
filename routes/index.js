@@ -6,6 +6,7 @@ var nodeio = require('node.io');
 var db = require('../model/db');
 var dateGlobal = null;
 var doneGlobal = true;
+
 var endpoint = "http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/past-24-hour-psi-readings";
 
  exports.index = function(req, res){
