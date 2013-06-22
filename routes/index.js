@@ -20,15 +20,16 @@ exports.latest = function(req, res){
 				tempReadings.push(title);
 			});
         //console.log(JSON.stringify(readings));
+        //res.send(JSON.stringify(tempReadings));
          //this.emit(stories);
          var readings = [];
 
          for (var i = 14; i<= 25; i++){
-         	readings.push(tempReadings[i].text);
+         	readings.push(tempReadings[i].fulltext);
          }
 
          for (var i = 40; i<= 51; i++){
-         	readings.push(tempReadings[i].text);
+         	readings.push(tempReadings[i].fulltext);
          }
 
          // Get latest reading
@@ -133,22 +134,23 @@ exports.list = function(req, res){
 			$('td').each(function(title) {
 				tempReadings.push(title);
 			});
-        //console.log(JSON.stringify(readings));
+        //console.log(JSON.stringify(tempReadings));
          //this.emit(stories);
          var readings = [];
 
          for (var i = 14; i<= 25; i++){
-         	readings.push(tempReadings[i].text);
+         	readings.push(tempReadings[i].fulltext);
          }
 
          for (var i = 40; i<= 51; i++){
-         	readings.push(tempReadings[i].text);
+         	readings.push(tempReadings[i].fulltext);
          }
 
          //Get last 10 readings
          var latestReadings = [];
          
          for (var i=readings.length -1 ; i>=0; i--){
+         	console.log(readin)
          	if (readings[i] == "-"){
          		continue;
          	} else {
