@@ -38,6 +38,10 @@ app.get('/', routes.index);
 app.get('/latest', routes.latest);
 app.get('/list/:limit', routes.list);
 app.get('/list', routes.list);
+app.get('/download-android', function(req, res){
+  var file = __dirname + '/files/haze.apk';
+  res.download(file); // Set disposition and send it.
+});
 
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -1,5 +1,92 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  body
+    header#header.site-header
+      .container
+        .row-fluid
+          .span12
+            h1.site-title.pull-left
+              a(href='#')
+                i.icon-cloud
+                | Haze
+            ul.unstyled.inline.pull-right.top-menu
+              li
+                a(href='#header') Home
+              li
+                a(href='#contact') Contact
+
+        .row-fluid
+          .span12
+            .site-description
+              h2 Haze
+              p
+                | Better to be safe than sorry. Use Haze to decide if you need to use a mask before leaving for the smokey outdoors.
+    section#details.details
+      .container
+        .row-fluid
+          .span6
+            .detail
+              .clearfix
+                i.icon-globe.icon-2x.pull-left
+                h4 Current PSI Value
+                p
+                  | Get the latest PSI value of the air before stepping out. Haze will also tell you the level of danger of the air outside as per NEA regulations.
+                i.icon-beaker.icon-2x.pull-left
+                h4 Graphical View
+                p
+                  | View a graphical version of the last ten hours worth of PSI variations.
+              .clearfix
+                i.icon-desktop.icon-2x.pull-left
+                h4 Haze-stagram (coming soon)
+                p
+                  | See what is being posted on Social Media about the Singapore Haze on #hazesg.
+              .clearfix
+                i.icon-trophy.icon-2x.pull-left
+                h4 Notifications (coming soon)
+                p
+                  | Receive notifications if Haze PSI values reach dangerous levels.
+          .span6
+            h2.pagination-centered Download
+            p
+            | Download android APK on your Android phone or tablet and install it. Will be available on Google Play Store soon.
+            .clearfix.purchase-button
+              a.cog-button(href='/download-android')
+                i.icon-tablet
+                | Download Android APK
+            .clearfix.purchase-button
+              a.cog-button(href='')
+                i.icon-tablet
+                | Coming soon for iPhone
+
+    section#contact.contact
+      .container
+        .row-fluid
+          h2 Feedback
+          p
+            | I'd love to hear from you. Comments, suggestions, ideas for more features are all appreciated. This idea was conceptualised and implemented within a space of 24 hours so a lot of tweaks are in place! 
+            br
+            | Haze is an open source project. Grab the server-side code at https://github.com/salmangadit/psi and the code for the Android app at https://github.com/salmangadit/psi-android.
+          a(href='salman.gadit@gmail.com') salman.gadit@gmail.com
+          ul.unstyled.inline.social
+            li
+              a(href='http://twitter.com/SalGad')
+                i.icon-twitter
+            li
+              a(href='https://github.com/salmangadit')
+                i.icon-github-alt
+            li
+              a(href='http://www.linkedin.com/profile/view?id=125767224')
+                i.icon-linkedin
+            li
+              a(href='http://www.salmangadit.me')
+                i.icon-cloud
+    //
+       Le javascript
+    //
+       Placed at the end of the document so the pages load faster 
+    script(src='js/jquery.js')
+    script(src='js/bootstrap.min.js')
+    script(src='js/jquery.scrollTo.js')
+    script(src='js/jquery.nav.js')
+    script(src='js/script.js')
