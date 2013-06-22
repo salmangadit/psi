@@ -38,8 +38,21 @@ exports.latest = function(req, res){
          var latestReading;
          var obj = new Object();
          for (var i=0; i<readings.length; i++){
+         	if (readings[i]=="-"){
+         		var temp = i - 1;
+         		while (readings[temp] == "-"){
+         			temp-=1;
+         		}
+         		var time = matchTime(temp);
+
+         		obj.time = time;
+         		obj.reading = readings[i-1];
+
+         		break;
+         	}
          	
-         	if (i==readings.length-1){
+         	if (i==readings.length - 1){
+         		console.log("Total readings: " + readings.length);
          		//Last reading, push dump to mongo
          		var storage = [];
 		        var today = new Date();
@@ -76,17 +89,6 @@ exports.latest = function(req, res){
 
          		obj.time = time;
          		obj.reading = readings[i];
-         	} else if (readings[i]=="-"){
-         		var temp = i - 1;
-         		while (readings[temp] == "-"){
-         			temp-=1;
-         		}
-         		var time = matchTime(temp);
-
-         		obj.time = time;
-         		obj.reading = readings[i-1];
-
-         		break;
          	}
          }
 
