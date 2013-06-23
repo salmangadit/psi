@@ -15,6 +15,7 @@
 
 //Get latest PSI report
 exports.latest = function(req, res){
+	req.connection.setTimeout(3000);
 	var options = {};
 
 	var myjob = new nodeio.Job(options, {
@@ -120,6 +121,7 @@ nodeio.start(myjob, function (err, output) {
 // 	]
 // }
 exports.list = function(req, res){
+	req.connection.setTimeout(3000);
 	var limit = null;
 	if (typeof req.params.limit == 'undefined')
 		limit = 10;
