@@ -46,44 +46,44 @@ exports.latest = function(req, res){
          		var time = matchTime(temp);
 
          		obj.time = time;
-         		obj.reading = readings[i-1];
+         		obj.reading = readings[temp];
 
          		break;
          	}
          	
          	if (i==readings.length - 1){
-         		console.log("Total readings: " + readings.length);
-         		//Last reading, push dump to mongo
-         		var storage = [];
-		        var today = new Date();
-				var dd = today.getDate();
-				var mm = today.getMonth()+1; //January is 0!
+    //      		console.log("Total readings: " + readings.length);
+    //      		//Last reading, push dump to mongo
+    //      		var storage = [];
+		  //       var today = new Date();
+				// var dd = today.getDate();
+				// var mm = today.getMonth()+1; //January is 0!
 
-				var yyyy = today.getFullYear();
-				if(dd<10){dd='0'+dd};
-				if(mm<10){mm='0'+mm};
-				today = dd+'/'+mm+'/'+yyyy;
-				console.log(today);
+				// var yyyy = today.getFullYear();
+				// if(dd<10){dd='0'+dd};
+				// if(mm<10){mm='0'+mm};
+				// today = dd+'/'+mm+'/'+yyyy;
+				// console.log(today);
 
-		 		for (var j = 0; j<readings.length; j++){
-		 			var store = new Object();
-		 			store.time = matchTime(j);
-		 			store.value = parseInt(readings[j]);
-		 			store.date = today;
-		 			storage.push(store);
-		 		}
+		 	// 	for (var j = 0; j<readings.length; j++){
+		 	// 		var store = new Object();
+		 	// 		store.time = matchTime(j);
+		 	// 		store.value = parseInt(readings[j]);
+		 	// 		store.date = today;
+		 	// 		storage.push(store);
+		 	// 	}
 
-		 		if (doneGlobal == false){
-		 		//data hasnt been stored for today
-		 			storeInDB(storage);
-		 			doneGlobal = true;
-		 		}
+		 	// 	if (doneGlobal == false){
+		 	// 	//data hasnt been stored for today
+		 	// 		storeInDB(storage);
+		 	// 		doneGlobal = true;
+		 	// 	}
 
-		 		// this will ensure that we reset the storage flag
-		 		if (dateGlobal != today){
-		 			dateGlobal = today;
-		 			doneGlobal = false;
-		 		}
+		 	// 	// this will ensure that we reset the storage flag
+		 	// 	if (dateGlobal != today){
+		 	// 		dateGlobal = today;
+		 	// 		doneGlobal = false;
+		 	// 	}
 
          		var time = matchTime(i);
 
