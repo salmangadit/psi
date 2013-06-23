@@ -2,12 +2,12 @@
 /*
  * GET home page.
  */
-var nodeio = require('node.io');
-var db = require('../model/db');
-var dateGlobal = null;
-var doneGlobal = true;
+ var nodeio = require('node.io');
+ var db = require('../model/db');
+ var dateGlobal = null;
+ var doneGlobal = true;
 
-var endpoint = "http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/past-24-hour-psi-readings";
+ var endpoint = "http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/past-24-hour-psi-readings";
 
  exports.index = function(req, res){
  	res.render('index', { title: 'Hazey' });
@@ -15,86 +15,98 @@ var endpoint = "http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-p
 
 //Get latest PSI report
 exports.latest = function(req, res){
-	nodeio.scrape(function() {
-		this.getHtml(endpoint, function(err, $) {
-			var tempReadings = [];
-			$('td').each(function(title) {
-				tempReadings.push(title);
-			});
-        //console.log(JSON.stringify(readings));
-        //res.send(JSON.stringify(tempReadings));
-         //this.emit(stories);
-         var readings = [];
+	var options = {};
 
-         for (var i = 32; i<= 43; i++){
-         	readings.push(tempReadings[i].fulltext);
-         }
+	var myjob = new nodeio.Job(options, {
+		input: false,
+		run: function (num) {
+			this.getHtml(endpoint, function(err, $) {
+				var tempReadings = [];
+				$('td').each(function(title) {
+					tempReadings.push(title);
+				});
+	        //console.log(JSON.stringify(readings));
+	        //res.send(JSON.stringify(tempReadings));
+	         //this.emit(stories);
+	         var readings = [];
 
-         for (var i = 58; i<= 69; i++){
-         	readings.push(tempReadings[i].fulltext);
-         }
+	         for (var i = 32; i<= 43; i++){
+	         	readings.push(tempReadings[i].fulltext);
+	         }
 
-         // Get latest reading
-         var latestReading;
-         var obj = new Object();
-         for (var i=0; i<readings.length; i++){
-         	if (readings[i]=="-"){
-         		var temp = i - 1;
-         		while (readings[temp] == "-"){
-         			temp-=1;
-         		}
-         		var time = matchTime(temp);
+	         for (var i = 58; i<= 69; i++){
+	         	readings.push(tempReadings[i].fulltext);
+	         }
 
-         		obj.time = time;
-         		obj.reading = readings[temp];
+	         // Get latest reading
+	         var latestReading;
+	         var obj = new Object();
+	         for (var i=0; i<readings.length; i++){
+	         	if (readings[i]=="-"){
+	         		var temp = i - 1;
+	         		while (readings[temp] == "-"){
+	         			temp-=1;
+	         		}
+	         		var time = matchTime(temp);
 
-         		break;
-         	}
-         	
-         	if (i==readings.length - 1){
-    //      		console.log("Total readings: " + readings.length);
-    //      		//Last reading, push dump to mongo
-    //      		var storage = [];
-		  //       var today = new Date();
-				// var dd = today.getDate();
-				// var mm = today.getMonth()+1; //January is 0!
+	         		obj.time = time;
+	         		obj.reading = readings[temp];
 
-				// var yyyy = today.getFullYear();
-				// if(dd<10){dd='0'+dd};
-				// if(mm<10){mm='0'+mm};
-				// today = dd+'/'+mm+'/'+yyyy;
-				// console.log(today);
+	         		break;
+	         	}
+	         	
+	         	if (i==readings.length - 1){
+	    //      		console.log("Total readings: " + readings.length);
+	    //      		//Last reading, push dump to mongo
+	    //      		var storage = [];
+			  //       var today = new Date();
+					// var dd = today.getDate();
+					// var mm = today.getMonth()+1; //January is 0!
 
-		 	// 	for (var j = 0; j<readings.length; j++){
-		 	// 		var store = new Object();
-		 	// 		store.time = matchTime(j);
-		 	// 		store.value = parseInt(readings[j]);
-		 	// 		store.date = today;
-		 	// 		storage.push(store);
-		 	// 	}
+					// var yyyy = today.getFullYear();
+					// if(dd<10){dd='0'+dd};
+					// if(mm<10){mm='0'+mm};
+					// today = dd+'/'+mm+'/'+yyyy;
+					// console.log(today);
 
-		 	// 	if (doneGlobal == false){
-		 	// 	//data hasnt been stored for today
-		 	// 		storeInDB(storage);
-		 	// 		doneGlobal = true;
-		 	// 	}
+			 	// 	for (var j = 0; j<readings.length; j++){
+			 	// 		var store = new Object();
+			 	// 		store.time = matchTime(j);
+			 	// 		store.value = parseInt(readings[j]);
+			 	// 		store.date = today;
+			 	// 		storage.push(store);
+			 	// 	}
 
-		 	// 	// this will ensure that we reset the storage flag
-		 	// 	if (dateGlobal != today){
-		 	// 		dateGlobal = today;
-		 	// 		doneGlobal = false;
-		 	// 	}
+			 	// 	if (doneGlobal == false){
+			 	// 	//data hasnt been stored for today
+			 	// 		storeInDB(storage);
+			 	// 		doneGlobal = true;
+			 	// 	}
 
-         		var time = matchTime(i);
+			 	// 	// this will ensure that we reset the storage flag
+			 	// 	if (dateGlobal != today){
+			 	// 		dateGlobal = today;
+			 	// 		doneGlobal = false;
+			 	// 	}
 
-         		obj.time = time;
-         		obj.reading = readings[i];
-         	}
-         }
+			 	var time = matchTime(i);
 
-         res.send(JSON.stringify(obj));
-     });
-	});
+			 	obj.time = time;
+			 	obj.reading = readings[i];
+			 }
+			}
+
+			res.send(JSON.stringify(obj));
+		});
+}
+});
+
+nodeio.start(myjob, function (err, output) {
+	    // console.log(output); //[4,5,6]
+	}, true);
+	// nodeio.scrape(function() {
+		
+	// });
 };
 
 // Get last :limit values from DB. If limit is not given, return 10.
@@ -114,30 +126,16 @@ exports.list = function(req, res){
 	else
 		limit = req.params.limit;
 
-	// db.getLogs(limit, function(err, result){
-	// 	if (err){
-	// 		console.log(err);
-	// 	} else {
-	// 		console.log(result);
-	// 	}
+	var options = {};
 
-	// 	var jsonarray = [];
-	// 	for (var i=0; i<result.length; i++){
-	// 		var obj = new Object();
-	// 		obj.time = result[i].time;
-	// 		obj.reading = result[i].value;
-	// 		jsonarray.push(obj);
-	// 	}
-
-	// 	res.send(JSON.stringify(jsonarray));
-	// });
-
-	nodeio.scrape(function() {
-		this.getHtml(endpoint, function(err, $) {
-			var tempReadings = [];
-			$('td').each(function(title) {
-				tempReadings.push(title);
-			});
+	var myjob = new nodeio.Job(options, {
+		input: false,
+		run: function (num) {
+			this.getHtml(endpoint, function(err, $) {
+				var tempReadings = [];
+				$('td').each(function(title) {
+					tempReadings.push(title);
+				});
         //console.log(JSON.stringify(tempReadings));
          //this.emit(stories);
          var readings = [];
@@ -171,18 +169,23 @@ exports.list = function(req, res){
          }
 
          res.send(JSON.stringify(latestReadings));
-    	});
+     });
+	}	
 	});
-};
+	nodeio.start(myjob, function (err, output) {
+	    // console.log(output); //[4,5,6]
+	}, true);
+
+}
 
 function storeInDB(readings){
-	 db.saveLogs(readings, function(err, result){
+	db.saveLogs(readings, function(err, result){
 		if (err){
 			console.log(err);
 		} else {
 			console.log(result);
 		}
- 	});
+	});
 }
 
 function matchTime(readingNumber){
