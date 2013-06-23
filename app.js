@@ -58,7 +58,8 @@ http.createServer(app).listen(app.get('port'), function(){
 });
 
 var rule = new schedule.RecurrenceRule();
-rule.minute = [0, 2, 4, 6, 8, 10, 30, 45];
+rule.minute = 45;
+rule.hour = 23;
 
 var cron = schedule.scheduleJob(rule, function(){
 	request('http://hidden-ocean-3278.herokuapp.com/latest', function(error, response, body) {
