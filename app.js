@@ -57,13 +57,13 @@ http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
 
-var rule = new schedule.RecurrenceRule();
-rule.minute = 45;
-rule.hour = 23;
+// var rule = new schedule.RecurrenceRule();
+// rule.minute = 45;
+// rule.hour = 23;
 
-var cron = schedule.scheduleJob(rule, function(){
-	request('http://hidden-ocean-3278.herokuapp.com/latest', function(error, response, body) {
-	    // var latest = JSON.parse(body);
-	    // console.log("body: " + body);
-	});
-});
+// var cron = schedule.scheduleJob(rule, function(){
+// 	request('http://hidden-ocean-3278.herokuapp.com/latest', function(error, response, body) {
+// 	    // var latest = JSON.parse(body);
+// 	    // console.log("body: " + body);
+// 	});
+// });
