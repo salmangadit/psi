@@ -30,11 +30,11 @@ exports.latest = function(req, res){
 	         //this.emit(stories);
 	         var readings = [];
 
-	         for (var i = 32; i<= 43; i++){
+	         for (var i = 378; i<= 389; i++){
 	         	readings.push(tempReadings[i].fulltext);
 	         }
 
-	         for (var i = 58; i<= 69; i++){
+	         for (var i = 404; i<= 415; i++){
 	         	readings.push(tempReadings[i].fulltext);
 	         }
 
@@ -56,7 +56,7 @@ exports.latest = function(req, res){
 	         	}
 	         	
 	         	if (i==readings.length - 1){
-	    //      		console.log("Total readings: " + readings.length);
+	    //     		console.log("Total readings: " + readings.length);
 	    //      		//Last reading, push dump to mongo
 	    //      		var storage = [];
 			  //       var today = new Date();
@@ -140,11 +140,11 @@ exports.list = function(req, res){
          //this.emit(stories);
          var readings = [];
 
-         for (var i = 32; i<= 43; i++){
+         for (var i = 378; i<= 389; i++){
          	readings.push(tempReadings[i].fulltext);
          }
 
-         for (var i = 58; i<= 69; i++){
+         for (var i = 404; i<= 415; i++){
          	readings.push(tempReadings[i].fulltext);
          }
 
